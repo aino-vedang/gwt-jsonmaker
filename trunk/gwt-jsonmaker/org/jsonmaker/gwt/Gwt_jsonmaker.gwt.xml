@@ -1,0 +1,6 @@
+<module>
+	<inherits name="com.google.gwt.core.Core"/>
+  	<generate-with class="org.jsonmaker.gwt.rebind.JsonizerGenerator">
+        <when-type-assignable class="org.jsonmaker.gwt.client.Jsonizer"/>
+	</generate-with> 
+</module>
