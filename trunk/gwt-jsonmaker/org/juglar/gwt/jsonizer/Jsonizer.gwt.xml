@@ -1,9 +1,0 @@
-<module>
-
-	<inherits name="com.google.gwt.core.Core"/>
-  
-  	<generate-with class="org.juglar.gwt.jsonizer.rebind.JsonizerGenerator">
-        <when-type-assignable class="org.juglar.gwt.jsonizer.client.Jsonizer"/>
-	</generate-with> 
-  
-</module>
