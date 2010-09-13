@@ -52,17 +52,20 @@ public class HashMapJsonizer implements Jsonizer{
 		var jsonizer = this.@org.jsonmaker.gwt.client.base.HashMapJsonizer::elemJsonizer;
 		var i;
 		for(i in jsObject){
-			var rawValue = jsObject[i];
-			var finalValue;
-			if(rawValue == null)
-				finalValue = null;
-			else{
-				if(typeof rawValue != 'string')
-					finalValue = jsonizer.@org.jsonmaker.gwt.client.Jsonizer::asJavaObject(Lcom/google/gwt/core/client/JavaScriptObject;)(Object(rawValue));
-				else
-					finalValue = @org.jsonmaker.gwt.client.base.Defaults::asPrimitiveString(Ljava/lang/String;)(rawValue);
+			if(i.indexOf('__gwt_ObjectId') != 0)//hack for chrome because gwt introduces another attribute __gwt_ObjectId for chrome!
+			{
+				var rawValue = jsObject[i];
+				var finalValue;
+				if(rawValue == null)
+					finalValue = null;
+				else{
+					if(typeof rawValue != 'string')
+						finalValue = jsonizer.@org.jsonmaker.gwt.client.Jsonizer::asJavaObject(Lcom/google/gwt/core/client/JavaScriptObject;)(Object(rawValue));
+					else
+						finalValue = @org.jsonmaker.gwt.client.base.Defaults::asPrimitiveString(Ljava/lang/String;)(rawValue);
+				}
+				map.@java.util.Map::put(Ljava/lang/Object;Ljava/lang/Object;)(i, finalValue);
 			}
-			map.@java.util.Map::put(Ljava/lang/Object;Ljava/lang/Object;)(i, finalValue);
 		}
 		return map;
 	}-*/;
