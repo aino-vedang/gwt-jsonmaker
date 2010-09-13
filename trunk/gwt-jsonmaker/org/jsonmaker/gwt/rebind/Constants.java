@@ -28,7 +28,7 @@ import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
  *
  */
 public final class Constants {
-	public static final String PACKAGE = "org.juglar.gwt.jsonizer.client";
+	public static final String PACKAGE = "org.jsonmaker.gwt.client";
 	
 	public static final String JSONIZER_SUFFIX = "Jsonizer";
 	public static final String JSONIZER_INTERFACE = PACKAGE + "." + JSONIZER_SUFFIX;
@@ -65,8 +65,6 @@ public final class Constants {
 	public static final Map PRIMITIVE_JSONIZERS;
 	public static final Map PRIMITIVE_ARRAY_JSONIZERS;
 	public static final Map PARAMETRIZED_JSONIZERS;
-
-	public static final String JSONIZER_INTERFACE_SIGNATURE = "Lorg/juglar/gwt/jsonizer/Jsonizer;";
 	
 	private static String jsonizerConstantName(String name){
 		return DEFAULTS_CLASS + "." + name;
