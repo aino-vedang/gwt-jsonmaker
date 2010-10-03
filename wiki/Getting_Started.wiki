@@ -1,0 +1,64 @@
+#labels Featured,Phase-Implementation
+*Features:*
+
+1. Converts Java Beans into json string and vice versa. Java Beans can have objects of other beans as well.
+
+2. Support for collections like ArrayList, HashMap, HashSet, Vectors and Arrays.
+
+3. Easy to use. Doesn't require any change in build process.
+
+*Getting Started:*
+
+1. add the following line in your {{{[}}}project{{{]}}}.gwt.xml file
+{{{
+    <inherits name="org.jsonmaker.gwt.Gwt_jsonmaker" />
+}}}
+
+2. Make a bean class e.g. Person
+
+3. Make an interface with same name as bean class and 'Jsonizer' appended to it e.g. PersonJsonizer. Make it extend the Jsonizer interface
+
+4.To jsonize a bean, create an instance of its Jsonizer using GWT.create() method and call asString method on it
+
+5. To de-jsonize a json string of a bean, use JsonizerParser.parse(jsonString).
+
+Below is the example code block 
+{{{
+// a Person bean class.
+class Person{
+  ...
+  public String getName(){...}
+  public void setName(String name){...}
+  ...
+  public int getAge(){...}
+  public void setAge(int age){...}
+}
+
+/**
+ * If you wants to jsonize it, you need to implement an extension of 
+ * Jsonizer interface suffixed with the 'Jsonizer' keyword.
+ */
+interface PersonJsonizer extends Jsonizer{}
+//Create a Person Object
+
+Person p = new Person();
+p.setName("Andres");
+p.setAge(28);
+
+//Create a PersonJsonizer instance
+PersonJsonzier pj = (PersonJsonizer)GWT.create(PersonJsonizer.class);
+//Jsonize
+String json = pj.asString(p);
+
+// A JSON String with Person properties
+//json = '{'name':'Andres','age':28}';
+
+// Create the Person Jsonizer
+PersonJsonizer jsonizer = (PersonJsonizer)GWT.create(PersonJsonizer.class);
+try{
+  // Translate the JSON String to a Person bean
+  Person p = (Person)JsonizerParser.parse(jsonizer, json);
+}catch(JsonizerException e){
+  Window.alert('JSON Translation Error!');
+}
+}}}
