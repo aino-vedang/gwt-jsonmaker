@@ -1,3 +1,4 @@
+#labels Phase-Implementation
 This page provides a tutorial to integrate the gwt-jsonmaker with tibcopagebus4gwt (http://code.google.com/p/tibcopagebus4gwt/). 
 
 = Introduction =
@@ -36,51 +37,47 @@ public interface MessageBeanJsonizer extends Jsonizer {}
 It is a good practice to have this string as the fully qualified path of MessageBean
 {{{
 try {
-			pageBusAdapter.PageBusSubscribe("com.tibcopagebus.jsonmaker.gwt.client.beans.MessageBean"
-					, null, null, null, null);
-		} catch (PageBusAdapterException e) {
-			e.printStackTrace();
-		}
+     pageBusAdapter.PageBusSubscribe(  "com.tibcopagebus.jsonmaker.gwt.client.beans.MessageBean", null, null, null, null);
+} catch (PageBusAdapterException e) {
+	e.printStackTrace();
+}
 }}}
 ==4. Create PageBus Subscriber Callback Listener==
 {{{
 pageBusAdapter.addPageBusSubscriptionCallbackListener(new PageBusListener(){
-			@Override
-			public String getName() {
-				return "com.tibcopagebus.jsonmaker.gwt.client.beans.MessageBean";
-			}
-
-			@Override
-			public void onPageBusSubscriptionCallback(PageBusEvent event) {
-				try {
+	@Override
+	public String getName() {
+		return "com.tibcopagebus.jsonmaker.gwt.client.beans.MessageBean";
+	}
+	@Override
+	public void onPageBusSubscriptionCallback(PageBusEvent event) {
+		try {
 //jsonmaker parser is used internally to parse the json
-					MessageBean message = 
-(MessageBean)event.getMessage((Jsonizer)GWT.create(MessageBeanJsonizer.class));
+		MessageBean message = (MessageBean)event.getMessage( (Jsonizer)GWT.create(MessageBeanJsonizer.class));
 //messageShow is a label
-					messageShow.setText(message.getMessage());
-				} catch (PageBusAdapterException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}});
+		messageShow.setText(message.getMessage());
+		} catch (PageBusAdapterException e) {
+			e.printStackTrace();
+		}
+}});
 }}}
 ==5. On an event publish the message==
 {{{
 //sendMessage is a button
 sendMessage.addClickHandler(new ClickHandler(){
-			@Override
-			public void onClick(ClickEvent event) {
-				MessageBean message = new MessageBean();
+	@Override
+	public void onClick(ClickEvent event) {
+		MessageBean message = new MessageBean();
 //messageTb is a textbox
-				message.setMessage(messageTb.getText());
-				try {
-//Jsonmaker is used internally to convert Message bean to json				pageBusAdapter.PageBusPublish("com.tibcopagebus.jsonmaker.gwt.client.beans.MessageBean",
+		message.setMessage(messageTb.getText());
+		try {
+//Jsonmaker is used internally to convert Message bean to json
+pageBusAdapter.PageBusPublish("com.tibcopagebus.jsonmaker.gwt.client.beans.MessageBean",
 message, (MessageBeanJsonizer) GWT.create(MessageBeanJsonizer.class));
-				} catch (PageBusAdapterException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}});
+		} catch (PageBusAdapterException e) {
+			e.printStackTrace();
+		}
+}});
 }}}
 ==6. Setup project.gwt.xml file==
 Add following lines to project.gwt.xml file
