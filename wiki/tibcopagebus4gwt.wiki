@@ -1,0 +1,11 @@
+This page provides a tutorial to integrate the gwt-jsonmaker with tibcopagebus4gwt (http://code.google.com/p/tibcopagebus4gwt/). 
+
+= Introduction =
+
+tibcopagebus4gwt is a messaging tool with supports publisher-subscriber model. This is particularly helpful in a page with mashups, when one message needs to be delivered to a number of widgets. 
+
+It is also helpful to reduce the dependencies among the widgets. Its publisher-subscriber model ensures that publishers would never know who the subscribers are and vice versa. Thus, subscriber specific code never finds its way into publisher and likewise for subscribers
+
+= Details =
+
+Tibcopagebus4gwt makes use of gwt-jsonizer(http://code.google.com/p/gwt-jsonizer) to convert Java beans to Json which is then transferred as the message. This json is then parsed into Java Bean, again usinfg gwt-jsonizer. Since gwt-jsonizer has not been updated the same task can be accomplished using gwt-jsonmaker.
