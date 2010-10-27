@@ -9,7 +9,7 @@ It is also helpful to reduce the dependencies among the widgets. Its publisher-s
 
 = Details =
 
-Tibcopagebus4gwt makes use of gwt-jsonizer(http://code.google.com/p/gwt-jsonizer) to convert Java beans to Json which is then transferred as the message. This json is then parsed into Java Bean, again usinfg gwt-jsonizer. Since gwt-jsonizer has not been updated for GWT 2.0+, the same task can be accomplished using gwt-jsonmaker.
+Tibcopagebus4gwt makes use of gwt-jsonizer(http://code.google.com/p/gwt-jsonizer) to convert Java beans to Json which is then transferred as the message. This json is then parsed into Java Bean, again usinfg gwt-jsonizer. Since gwt-jsonizer has not been updated for GWT 2.0+, the same task can be accomplished using gwt-jsonmaker. You can find the tibcopagebus example in the downloads at http://code.google.com/p/gwt-jsonmaker/downloads/detail?name=TibcoPageBusTest.zip&can=2&q=
 
 = How to use tibcopagebus4gwt with jsonmaker? =
 
@@ -94,5 +94,3 @@ Add following lines to project.gwt.xml file
    }
 </script>
 }}}
-
-You can find the tibcopagebus example in the downloads at 
