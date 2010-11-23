@@ -44,7 +44,7 @@ public class Defaults {
 	public static final Jsonizer DATE_JSONIZER = new Jsonizer(){
 		
 		public Object asJavaObject(JavaScriptObject jsValue) throws JsonizerException {
-			return new Date(asPrimitiveLong(jsValue));
+			return new Date((long)asPrimitiveLong(jsValue));
 		}	
 		
 		public String asString(Object javaValue) throws JsonizerException {
@@ -110,7 +110,7 @@ public class Defaults {
 	 * @return translated long.
 	 * @throws JsonizerException if jsValue doesn't match a java long.
 	 */
-	public static native int asPrimitiveLong(JavaScriptObject jsValue) throws JsonizerException /*-{
+	public static native double asPrimitiveLong(JavaScriptObject jsValue) throws JsonizerException /*-{
 		if((jsValue instanceof Number || ((typeof jsValue)=='number'))&& Math.floor(jsValue)==jsValue)
 			return parseInt(jsValue);
 		@org.jsonmaker.gwt.client.base.Defaults::throwJsonizerException()();
@@ -183,7 +183,7 @@ public class Defaults {
 	 */
 	public static final Jsonizer LONG_JSONIZER = new Jsonizer(){
 		public Object asJavaObject(JavaScriptObject jsValue) throws JsonizerException {
-			return new Long(asPrimitiveLong(jsValue));
+			return new Long((long)asPrimitiveLong(jsValue));
 		}
 		public String asString(Object javaValue) throws JsonizerException {
 			return javaValue.toString();			
@@ -350,7 +350,7 @@ public class Defaults {
 		}
 		
 		private static void storeValue(long[] array, int index, JavaScriptObject jsValue) throws JsonizerException{
-			array[index] = asPrimitiveLong(jsValue);
+			array[index] = (long) asPrimitiveLong(jsValue);
 		}
 		
 		private static long[] createArray(int size){
