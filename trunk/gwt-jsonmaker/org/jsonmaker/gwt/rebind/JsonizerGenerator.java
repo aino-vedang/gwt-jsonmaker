@@ -117,7 +117,7 @@ public class JsonizerGenerator extends Generator {
 	    String simpleStubClassName = RebindUtils.simpleStubClassName(converterClass);
 
 	    String qualifiedStubClassName = packageName + "." + simpleStubClassName;
-
+	    SourceWriter swBean = getSourceWriter(logger, context, packageName, simpleBeanClassName);
 	    SourceWriter sw = getSourceWriter(logger, context, packageName, simpleStubClassName, converterClass.getQualifiedSourceName());
 	    if (sw == null) {
 	      return qualifiedStubClassName;
@@ -148,5 +148,15 @@ public class JsonizerGenerator extends Generator {
 		return composerFactory.createSourceWriter(ctx, printWriter);
 	}
 	
+	private SourceWriter getSourceWriter(TreeLogger logger,	GeneratorContext ctx, String packageName
+			, String className) {
+		PrintWriter printWriter = ctx.tryCreate(logger, packageName, className);
+		if (printWriter == null) {
+			return null;
+		}
+		ClassSourceFileComposerFactory composerFactory = new ClassSourceFileComposerFactory(
+			packageName, className);
 
+		return composerFactory.createSourceWriter(ctx, printWriter);
+	}
 }

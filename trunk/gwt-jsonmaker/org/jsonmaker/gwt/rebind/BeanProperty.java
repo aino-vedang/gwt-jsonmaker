@@ -18,6 +18,7 @@ package org.jsonmaker.gwt.rebind;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
@@ -121,17 +122,23 @@ public class BeanProperty {
 		for (int i = 0; i < methods.length; i++) {
 			JMethod getter = methods[i];
 			String getterName = getter.getName();
-			if (
-				getterName.startsWith("get") && 
-				getter.getParameters().length == 0 && 
-				isCandidateAccessor(getter)
-			){
+			if ((getterName.startsWith("get") || getterName.startsWith("is"))
+					&& getter.getParameters().length == 0 && isCandidateAccessor(getter))
+			{
 				JType type = getter.getReturnType();
-				//System.out.println("Creando Jsonizer para " + type.getParameterizedQualifiedSourceName());
-
-				String capitalizedName = getterName.substring(3);
+				int propertyNameStartIndex = getterName.startsWith("get") ? 3 : 2;
+				String capitalizedName = getterName.substring(propertyNameStartIndex);
 				String setterName = "set" + capitalizedName;
 				JMethod setter = cls.findMethod(setterName,	new JType[] { type });
+				if(type.equals(JPrimitiveType.LONG))
+				{
+					setter = cls.findMethod(setterName,	new JType[] { JPrimitiveType.DOUBLE });
+					if(setter == null)
+						throw new IllegalArgumentException(
+								"variable named '" + capitalizedName.substring(0,1).toLowerCase() 
+								+ capitalizedName.substring(1) + "' in class named '" + cls.getName()
+								+ "' should declare a setter with argument of type double; This argument may be cast to long in the method");
+				}
 				if (
 					setter != null && 
 					setter.getReturnType().equals(JPrimitiveType.VOID) && 

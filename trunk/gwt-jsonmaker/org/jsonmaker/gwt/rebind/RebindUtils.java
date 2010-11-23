@@ -18,6 +18,7 @@ package org.jsonmaker.gwt.rebind;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JParameter;
+import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 
 /**
  * 
@@ -65,7 +66,10 @@ public final class RebindUtils {
 		String argSignature = "";
 		JParameter[] params = method.getParameters();
 		for(int i = 0; i < params.length; i++){
-			argSignature += params[i].getType().getJNISignature();
+			if(params[i].getType().equals(JPrimitiveType.LONG))
+				argSignature += JPrimitiveType.DOUBLE.getJNISignature();
+			else
+				argSignature += params[i].getType().getJNISignature();
 		}		
 		return "@" + method.getEnclosingType().getQualifiedSourceName() + "::" + method.getName() + "("	+ argSignature + ")(" + paramExp + ")";
 	}
