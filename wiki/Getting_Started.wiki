@@ -22,7 +22,8 @@
 
 ====5. To de-jsonize a json string of a bean, use JsonizerParser.parse(jsonString).====
 
-Below is the example code block 
+Below is the example code block
+The Person bean without jsonizer declaration in its body
 {{{
 // a Person bean class.
 class Person{
@@ -33,12 +34,30 @@ class Person{
   public int getAge(){...}
   public void setAge(int age){...}
 }
-
+}}}
+and jsonizer implemented in separate java file
+{{{
 /**
- * If you wants to jsonize it, you need to implement an extension of 
- * Jsonizer interface suffixed with the 'Jsonizer' keyword.
+ * If you want to jsonize it, you need to implement an extension of 
+ * Jsonizer interface using bean name suffixed with the 'Jsonizer' keyword.
  */
-interface PersonJsonizer extends Jsonizer{}
+public interface PersonJsonizer extends Jsonizer{}
+}}}
+*The jsonizer can alternatively be defined within Person class*
+{{{
+// a Person bean class.
+class Person{
+  ...
+  public String getName(){...}
+  public void setName(String name){...}
+  ...
+  public int getAge(){...}
+  public void setAge(int age){...}
+  public interface PersonJsonizer extends Jsonizer{}
+}
+}}}
+Let the jsonizing and de-jsonizing begin
+{{{
 //Create a Person Object
 
 Person p = new Person();
