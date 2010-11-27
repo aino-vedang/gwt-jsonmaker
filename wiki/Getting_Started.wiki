@@ -1,5 +1,5 @@
 #labels Featured,Phase-Implementation
-*Features:*
+===Features:===
 
 1. Converts Java Beans into json string and vice versa. Java Beans can have objects of other beans as well.
 
@@ -7,7 +7,7 @@
 
 3. Easy to use. Doesn't require any change in build process.
 
-*Getting Started:*
+===Getting Started:===
 
 ====1. add the following line in your {{{[}}}project{{{]}}}.gwt.xml file====
 {{{
