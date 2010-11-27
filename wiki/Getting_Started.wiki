@@ -9,18 +9,18 @@
 
 *Getting Started:*
 
-1. add the following line in your {{{[}}}project{{{]}}}.gwt.xml file
+====1. add the following line in your {{{[}}}project{{{]}}}.gwt.xml file====
 {{{
     <inherits name="org.jsonmaker.gwt.Gwt_jsonmaker" />
 }}}
 
-2. Make a bean class e.g. Person
+====2. Make a bean class e.g. Person====
 
-3. Make an interface with same name as bean class and 'Jsonizer' appended to it e.g. PersonJsonizer. Make it extend the Jsonizer interface
+====3. Make an interface with same name as bean class and 'Jsonizer' appended to it e.g. PersonJsonizer. Make it extend the Jsonizer interface====
 
-4.To jsonize a bean, create an instance of its Jsonizer using GWT.create() method and call asString method on it
+====4.To jsonize a bean, create an instance of its Jsonizer using GWT.create() method and call asString method on it====
 
-5. To de-jsonize a json string of a bean, use JsonizerParser.parse(jsonString).
+====5. To de-jsonize a json string of a bean, use JsonizerParser.parse(jsonString).====
 
 Below is the example code block 
 {{{
@@ -62,3 +62,18 @@ try{
   Window.alert('JSON Translation Error!');
 }
 }}}
+
+====6. There is no need to create additional Jsonizers for native supported types and their collections e.g. List of Strings can be serialized as follows====
+{{{
+final ArrayListJsonizer aj = new ArrayListJsonizer(Defaults.STRING_JSONIZER);
+List<String> list = new ArrayList<String>();
+list.add("gaurav1");
+list.add("gaurav2");
+list.add("gaurav3");
+final String listJson = aj.asString(list);
+}}}
+and can be de-sierialized as follows
+{{{
+List<String> list = (ArrayList<String>)JsonizerParser.parse(aj, listJson)
+}}}
+The native supported types are given in Defaults class of jsonmaker
