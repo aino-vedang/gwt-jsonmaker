@@ -96,3 +96,5 @@ and can be de-sierialized as follows
 List<String> list = (ArrayList<String>)JsonizerParser.parse(aj, listJson)
 }}}
 The native supported types are given in Defaults class of jsonmaker
+
+'Defaults' is the class which contains jsonizers for all the natively supported types e.g. String, Date, all wrapper classes like Integer, Boolean etc.
