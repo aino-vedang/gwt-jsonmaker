@@ -124,7 +124,9 @@ public class Defaults {
 			return new Character(asPrimitiveChar(jsValue));			
 		}
 		public String asString(Object javaValue) throws JsonizerException {
-			return Long.toString((long)((Character)javaValue).charValue());
+			if(javaValue != null)
+				return Long.toString((long)((Character)javaValue).charValue());
+			else return null;
 		}
 	};
 	
@@ -162,7 +164,9 @@ public class Defaults {
 			return new Double(asPrimitiveDouble(jsValue));
 		}
 		public String asString(Object javaValue) throws JsonizerException {
-			return javaValue.toString();			
+			if(javaValue != null)
+				return javaValue.toString();
+			else return null;
 		}		
 	};
 	
@@ -174,7 +178,9 @@ public class Defaults {
 			return new Float(asPrimitiveFloat(jsValue));
 		}
 		public String asString(Object javaValue) throws JsonizerException {
-			return javaValue.toString();			
+			if(javaValue != null)
+				return javaValue.toString();
+			else return null;	
 		}
 	};
 
@@ -186,7 +192,9 @@ public class Defaults {
 			return new Long((long)asPrimitiveLong(jsValue));
 		}
 		public String asString(Object javaValue) throws JsonizerException {
-			return javaValue.toString();			
+			if(javaValue != null)
+				return javaValue.toString();
+			else return null;		
 		}
 		
 	};
@@ -199,7 +207,9 @@ public class Defaults {
 			return new Short((short)asPrimitiveLong(jsValue));
 		}
 		public String asString(Object javaValue) throws JsonizerException {
-			return javaValue.toString();			
+			if(javaValue != null)
+				return javaValue.toString();
+			else return null;		
 		}		
 	};
 
@@ -211,7 +221,9 @@ public class Defaults {
 			return new Integer((int)asPrimitiveLong(jsValue));
 		}
 		public String asString(Object javaValue) throws JsonizerException {
-			return javaValue.toString();			
+			if(javaValue != null)
+				return javaValue.toString();
+			else return null;
 		}
 	};
 
@@ -255,7 +267,9 @@ public class Defaults {
 			return asPrimitiveBoolean(jsValue) ? Boolean.TRUE: Boolean.FALSE;
 		}
 		public String asString(Object javaValue) throws JsonizerException {
-			return javaValue.toString();			
+			if(javaValue != null)
+				return javaValue.toString();
+			else return null;		
 		}
 	};
 
@@ -291,17 +305,21 @@ public class Defaults {
 		}-*/;
 		
 		public String asString(Object javaValue) throws JsonizerException {
-			int[] array = (int[])javaValue;
-			StringBuffer buffer = new StringBuffer();
-			buffer.append('[');
-			int top = array.length - 1;
-			for(int i = 0; i < array.length; i++){
-				buffer.append(array[i]);
-				if(i < top)
-					buffer.append(',');
+			if(javaValue != null)
+			{
+				int[] array = (int[])javaValue;
+				StringBuffer buffer = new StringBuffer();
+				buffer.append('[');
+				int top = array.length - 1;
+				for(int i = 0; i < array.length; i++){
+					buffer.append(array[i]);
+					if(i < top)
+						buffer.append(',');
+				}
+				buffer.append(']');
+				return buffer.toString();
 			}
-			buffer.append(']');
-			return buffer.toString();
+			else return "null";
 		}
 		
 		private static void storeValue(int[] array, int index, JavaScriptObject jsValue) throws JsonizerException{

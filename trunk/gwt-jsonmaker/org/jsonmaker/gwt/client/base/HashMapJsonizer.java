@@ -43,7 +43,7 @@ public class HashMapJsonizer implements Jsonizer{
 		this.elemJsonizer = elemJsonizer;		
 	}
 		
-	private Map createMap(){
+	protected Map createMap(){
 		return new HashMap();
 	}
 	

@@ -27,6 +27,7 @@ import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JArrayType;
 import com.google.gwt.core.ext.typeinfo.JClassType;
+import com.google.gwt.core.ext.typeinfo.JParameter;
 import com.google.gwt.core.ext.typeinfo.JParameterizedType;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 import com.google.gwt.core.ext.typeinfo.JType;
@@ -81,7 +82,8 @@ public class JsonizerWriter {
 		sw.println("\"" + jsonPropName(prop) + "\": function(" + bean + ", " + jsValue + "){");
 		sw.indent();
 		
-		if(prop.getType().isPrimitive() == null && !isNotNull(prop) && !prop.getType().toString().equals("class java.lang.String")){
+		if(prop.getType().isPrimitive() == null 
+				&& !isNotNull(prop) && !prop.getType().toString().equals("class java.lang.String")){
 			sw.println("if(" + jsValue + " == null){");
 			sw.indent();
 			sw.println(prop.getJSNISetterInvocation(bean, "null") + "; ");
@@ -119,12 +121,23 @@ public class JsonizerWriter {
 			toJavaExp = jsonizerExp + "." + Constants.ASJAVAOBJECT_METHOD_SIGNATURE + 
 				"(Object(" + jsValue + "))";
 		}
-		String setterInvocation = prop.getJSNISetterInvocation(bean, toJavaExp) + ";";
-		sw.println(setterInvocation);
-		
+		if(prop.getType() == JPrimitiveType.LONG)
+		{
+			String argSignature = "Ljava/lang/Object;";
+			JParameter[] params = prop.getSetter().getParameters();
+			for(int i = 0; i < params.length; i++){
+				if(params[i].getType().equals(JPrimitiveType.LONG))
+					argSignature += JPrimitiveType.DOUBLE.getJNISignature();
+				else
+					argSignature += params[i].getType().getJNISignature();
+			}		
+			sw.println(self + ".@" + implClassName + "::" + prop.getSetter().getName() + "(" + argSignature 
+					+ ")(" + bean + "," + toJavaExp + ");");
+		}
+		else
+			sw.println(prop.getJSNISetterInvocation(bean, toJavaExp) + ";");
 		sw.outdent();		
 		sw.print("}");
-
 	}
 	
 
@@ -396,7 +409,23 @@ public class JsonizerWriter {
 	}
 	
 	private void writeCreateSetterPoolMethod(List properties, Map jsonizers) throws UnableToCompleteException{
-		
+		Iterator it = properties.iterator();
+
+		while(it.hasNext()){
+			BeanProperty prop = (BeanProperty)it.next();
+			if(prop.getType() == JPrimitiveType.LONG)
+			{
+				sw.println("");
+				sw.print("private void ");sw.print(prop.getSetter().getName());sw.print("(");
+						sw.print("Object bean, double d");sw.print(")");sw.print("{");
+				sw.println("");sw.indent();
+					sw.print("((" + prop.getSetter().getEnclosingType().getQualifiedSourceName() + ")bean).");
+					sw.print(prop.getSetter().getName());sw.print("((long) d);");
+					sw.println("");
+				sw.outdent();
+				sw.print("}");sw.println("");
+			}
+		}
 		final String self = "__self__";
 		sw.println("protected native " + Constants.JS_OBJECT_CLASS + " createSetterPool()/*-{");
 
@@ -407,7 +436,7 @@ public class JsonizerWriter {
 		
 		sw.indent();		
 		
-		Iterator it = properties.iterator();
+		it = properties.iterator();
 
 		while(it.hasNext()){
 			

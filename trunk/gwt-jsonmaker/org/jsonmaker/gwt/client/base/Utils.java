@@ -83,9 +83,11 @@ public class Utils {
 	 * @return the string escaped.
 	 */
 	public static native String escapeValue(String toEscape) /*-{
-    	var s = toEscape.replace(/[\x00-\x1F"\\]/g, function(x) {
-	    	return @org.jsonmaker.gwt.client.base.Utils::escapeChar(Ljava/lang/String;)(x);
-	    });
+    	var s = null;
+    	if(toEscape != null) 
+    		s = toEscape.replace(/[\x00-\x1F"\\]/g, function(x) {
+	    		return @org.jsonmaker.gwt.client.base.Utils::escapeChar(Ljava/lang/String;)(x);
+	    	});
 	    return "\"" + s + "\"";
 	}-*/;
 		

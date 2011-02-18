@@ -15,29 +15,29 @@
  */
 package org.jsonmaker.gwt.client.base;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.jsonmaker.gwt.client.Jsonizer;
 
 /**
+ * Translates objects of class java.util.HashMap.
  * 
  * @author Gaurav Saxena 
  * Credited to Andrés Adolfo Testi
  *
  */
-public class HashSetJsonizer extends CollectionJsonizer {
+public class TreeMapJsonizer extends HashMapJsonizer{
+	
 	/**
-	 * Constructs a new HashSetJsonizer
-	 * 
-	 * @param elemJsonizer jsonizer for inner elements
+	 * Constructs a new HashMapJsonizer.
+	 * @param elemJsonizer Jsonizer for inner type.
 	 */
-	public HashSetJsonizer(Jsonizer elemJsonizer) {
+	public TreeMapJsonizer(Jsonizer elemJsonizer){
 		super(elemJsonizer);
 	}
-
-	protected Collection createCollection() {
-		return new HashSet();
-	}	
-
+		
+	protected Map createMap(){
+		return new TreeMap();
+	}
 }

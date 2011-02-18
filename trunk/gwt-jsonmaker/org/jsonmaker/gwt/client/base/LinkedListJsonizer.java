@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Andrés Adolfo Testi < andres.a.testi AT gmail.com >
+ * Copyright 2007 Gaurav Saxena <gsaxena at gmail dot com >
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,28 +16,29 @@
 package org.jsonmaker.gwt.client.base;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedList;
 
 import org.jsonmaker.gwt.client.Jsonizer;
 
 /**
+ * Translates objects of type java.util.ArrayList.
  * 
  * @author Gaurav Saxena 
- * Credited to Andrés Adolfo Testi
  *
  */
-public class HashSetJsonizer extends CollectionJsonizer {
+public class LinkedListJsonizer extends CollectionJsonizer{
+	
 	/**
-	 * Constructs a new HashSetJsonizer
+	 * Constructs a new LinkedListJsonizer
 	 * 
 	 * @param elemJsonizer jsonizer for inner elements
 	 */
-	public HashSetJsonizer(Jsonizer elemJsonizer) {
+	public LinkedListJsonizer(Jsonizer elemJsonizer) {
 		super(elemJsonizer);
 	}
 
 	protected Collection createCollection() {
-		return new HashSet();
-	}	
-
+		return new LinkedList();
+	}
+	
 }

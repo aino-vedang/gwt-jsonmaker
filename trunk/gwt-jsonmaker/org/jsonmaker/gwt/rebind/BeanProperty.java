@@ -18,7 +18,6 @@ package org.jsonmaker.gwt.rebind;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
@@ -130,7 +129,7 @@ public class BeanProperty {
 				String capitalizedName = getterName.substring(propertyNameStartIndex);
 				String setterName = "set" + capitalizedName;
 				JMethod setter = cls.findMethod(setterName,	new JType[] { type });
-				if(type.equals(JPrimitiveType.LONG))
+				/*if(type.equals(JPrimitiveType.LONG))
 				{
 					setter = cls.findMethod(setterName,	new JType[] { JPrimitiveType.DOUBLE });
 					if(setter == null)
@@ -138,7 +137,7 @@ public class BeanProperty {
 								"variable named '" + capitalizedName.substring(0,1).toLowerCase() 
 								+ capitalizedName.substring(1) + "' in class named '" + cls.getName()
 								+ "' should declare a setter with argument of type double; This argument may be cast to long in the method");
-				}
+				}*/
 				if (
 					setter != null && 
 					setter.getReturnType().equals(JPrimitiveType.VOID) && 
@@ -149,14 +148,10 @@ public class BeanProperty {
 				}
 			}
 		}
-
 		return properties;
-
 	}
 	
 	public String getJSNISetterInvocation(String obj, String paramExp){
 		return RebindUtils.getJSNIInvocationExp(obj, setter, paramExp);
 	}
-
-
 }
