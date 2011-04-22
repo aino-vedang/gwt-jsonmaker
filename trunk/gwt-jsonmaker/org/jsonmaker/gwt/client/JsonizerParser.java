@@ -59,6 +59,6 @@ public final class JsonizerParser {
 	 		x = (Object(x));
 	 	}
 	 	return x;
-	}-*/;	
+	}-*/;
 	
 }
