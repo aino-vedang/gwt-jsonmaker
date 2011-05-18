@@ -47,9 +47,14 @@ public final class Constants {
 	
 	public static final String GWT_CLASS = "com.google.gwt.core.client.GWT";
 	public static final String HASHMAP_JSONIZER = BASE_PACKAGE + ".HashMap" + JSONIZER_SUFFIX;
+	public static final String LINKED_HASHMAP_JSONIZER = BASE_PACKAGE + ".LinkedHashMap" + JSONIZER_SUFFIX;
+	public static final String TREEMAP_JSONIZER = BASE_PACKAGE + ".TreeMap" + JSONIZER_SUFFIX;
 	public static final String ARRAYLIST_JSONIZER = BASE_PACKAGE + ".ArrayList" + JSONIZER_SUFFIX;
+	public static final String LINKEDLIST_JSONIZER = BASE_PACKAGE + ".LinkedList" + JSONIZER_SUFFIX;
 	public static final String VECTOR_JSONIZER = BASE_PACKAGE + ".Vector" + JSONIZER_SUFFIX;
 	public static final String HASHSET_JSONIZER = BASE_PACKAGE + ".HashSet" + JSONIZER_SUFFIX;
+	public static final String LINKED_HASHSET_JSONIZER = BASE_PACKAGE + ".LinkedHashSet" + JSONIZER_SUFFIX;
+	public static final String TREESET_JSONIZER = BASE_PACKAGE + ".TreeSet" + JSONIZER_SUFFIX;
 	public static final String STACK_JSONIZER = BASE_PACKAGE + ".Stack" + JSONIZER_SUFFIX;	
 	
 	public static final String AS_STRING_METHOD = "asString";
@@ -117,16 +122,21 @@ public final class Constants {
 		Map _PARAMETRIZED_JSONIZERS = new HashMap();
 		_PARAMETRIZED_JSONIZERS.put("java.util.Map", HASHMAP_JSONIZER);
 		_PARAMETRIZED_JSONIZERS.put("java.util.HashMap", HASHMAP_JSONIZER);
+		_PARAMETRIZED_JSONIZERS.put("java.util.LinkedHashMap", LINKED_HASHMAP_JSONIZER);
+		_PARAMETRIZED_JSONIZERS.put("java.util.TreeMap", TREEMAP_JSONIZER);
 		_PARAMETRIZED_JSONIZERS.put("java.util.AbstractMap", HASHMAP_JSONIZER);
 		
 		_PARAMETRIZED_JSONIZERS.put("java.util.Collection", ARRAYLIST_JSONIZER);
 		_PARAMETRIZED_JSONIZERS.put("java.util.List", ARRAYLIST_JSONIZER);
 		_PARAMETRIZED_JSONIZERS.put("java.util.ArrayList", ARRAYLIST_JSONIZER);
+		_PARAMETRIZED_JSONIZERS.put("java.util.LinkedList", LINKEDLIST_JSONIZER);
 		
 		_PARAMETRIZED_JSONIZERS.put("java.util.Vector", VECTOR_JSONIZER);
 		
 		_PARAMETRIZED_JSONIZERS.put("java.util.Set", HASHSET_JSONIZER);
 		_PARAMETRIZED_JSONIZERS.put("java.util.HashSet", HASHSET_JSONIZER);
+		_PARAMETRIZED_JSONIZERS.put("java.util.LinkedHashSet", LINKED_HASHSET_JSONIZER);
+		_PARAMETRIZED_JSONIZERS.put("java.util.TreeSet", TREESET_JSONIZER);
 		_PARAMETRIZED_JSONIZERS.put("java.util.AbstractSet", HASHSET_JSONIZER);
 		
 		_PARAMETRIZED_JSONIZERS.put("java.util.Stack", STACK_JSONIZER);
