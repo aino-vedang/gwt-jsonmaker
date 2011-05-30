@@ -64,7 +64,7 @@ public class JsonizerWriter {
 	}
 	
 	private String jsonPropName(BeanProperty prop){
-	    PropName propName = prop.getGetter().getAnnotation(PropName.class);
+	    PropName propName = prop.getField().getAnnotation(PropName.class);
 		if (propName != null) {
 			if (propName.value() != null && !propName.value().isEmpty()) {
 				return propName.value();
@@ -532,6 +532,6 @@ public class JsonizerWriter {
 	}
 	
 	private boolean isRequired(BeanProperty prop){
-		return prop.getGetter().isAnnotationPresent(Required.class);
+		return prop.getField().isAnnotationPresent(Required.class);
 	}
 }

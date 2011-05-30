@@ -78,7 +78,7 @@ public class BeanProperty {
 		
 	private static boolean isCandidateAccessor(JMethod method, JField field){
 		return 
-			field.isAnnotationPresent(Transient.class) &&  
+			!field.isAnnotationPresent(Transient.class) &&  
 			method.isPublic() && 
 			!method.isAbstract() && 
 			!method.isStatic();
