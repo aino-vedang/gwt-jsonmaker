@@ -22,7 +22,7 @@ import com.google.gwt.core.client.JavaScriptObject;
  * to encode and decode Java Objects to JSON representations. It's 
  * possible too, to implement user defined Jsonizers. 
  * 
- * @author Gaurav Saxena 
+ * @author Gaurav Saxena<gsaxena81@gmail.com> 
  * Credited to Andrés Adolfo Testi
  *
  */

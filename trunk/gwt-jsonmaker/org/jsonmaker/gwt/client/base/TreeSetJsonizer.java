@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Gaurav Saxena < gsaxena81 AT gmail DOT com>
+ * Copyright 2007 Gaurav Saxena<gsaxena81@gmail.com> < gsaxena81 AT gmail DOT com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,7 +22,7 @@ import org.jsonmaker.gwt.client.Jsonizer;
 
 /**
  * 
- * @author Gaurav Saxena 
+ * @author Gaurav Saxena<gsaxena81@gmail.com> 
  * Credited to Andrés Adolfo Testi
  *
  */

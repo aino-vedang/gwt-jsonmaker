@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Gaurav Saxena <gsaxena at gmail dot com >
+ * Copyright 2007 Gaurav Saxena<gsaxena81@gmail.com> <gsaxena at gmail dot com >
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -23,7 +23,7 @@ import org.jsonmaker.gwt.client.Jsonizer;
 /**
  * Translates objects of type java.util.ArrayList.
  * 
- * @author Gaurav Saxena 
+ * @author Gaurav Saxena<gsaxena81@gmail.com> 
  *
  */
 public class LinkedListJsonizer extends CollectionJsonizer{

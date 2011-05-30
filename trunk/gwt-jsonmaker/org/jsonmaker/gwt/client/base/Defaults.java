@@ -28,7 +28,7 @@ import com.google.gwt.core.client.JavaScriptObject;
  *	Static instances of Jsonizers for arrays of primitive types.
  *	Methods to translate JavaScript values to Java primitive types.
  * 
- * @author Gaurav Saxena 
+ * @author Gaurav Saxena<gsaxena81@gmail.com> 
  * Credited to Andrés Adolfo Testi
  *
  */

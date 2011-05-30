@@ -26,7 +26,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 /**
  * Root class of Jsonizers for collections.
  * 
- * @author Gaurav Saxena 
+ * @author Gaurav Saxena<gsaxena81@gmail.com> 
  * Credited to Andrés Adolfo Testi
  *
  */
@@ -74,7 +74,8 @@ public abstract class CollectionJsonizer implements Jsonizer {
 		Iterator it = ((Collection)javaValue).iterator();
 		buffer.append('[');
 		while(it.hasNext()){
-			buffer.append(elemJsonizer.asString(it.next()));
+			Object obj = it.next();
+			buffer.append(elemJsonizer.asString(obj));
 			if(it.hasNext())
 				buffer.append(',');
 		}

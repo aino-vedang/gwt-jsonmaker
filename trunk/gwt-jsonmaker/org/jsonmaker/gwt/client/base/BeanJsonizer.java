@@ -27,7 +27,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 /**
  * Used internally by the Jsonizer API.
  * 
- * @author Gaurav Saxena 
+ * @author Gaurav Saxena<gsaxena81@gmail.com> 
  * Credited to Andrés Adolfo Testi
  *
  */
@@ -82,7 +82,7 @@ public abstract class BeanJsonizer implements Jsonizer {
 		return remain;
 	}-*/;
 	
-	private native boolean containsRequiredProperties(JavaScriptObject jsValue)/*-{
+	private native String containsRequiredProperties(JavaScriptObject jsValue)/*-{
 		var requiredProperties = this.@org.jsonmaker.gwt.client.base.BeanJsonizer::requiredProperties;
 		//var prop;
 		//GS - requriedProperties is an array and here it was accessed as an object. IE and FF did not find any properties
@@ -91,10 +91,10 @@ public abstract class BeanJsonizer implements Jsonizer {
 			//for(prop in requiredProperties){
 		for(var i = 0; i < requiredProperties.length; i++){
 			if(jsValue[requiredProperties[i]] == undefined){
-				return false;
+				return requiredProperties[i];
 			}
 		}
-		return true;
+		return null;
 	}-*/;
 	
 	public Object asJavaObject(JavaScriptObject jsValue) throws JsonizerException {
@@ -104,15 +104,22 @@ public abstract class BeanJsonizer implements Jsonizer {
 		BeanJsonizer jsonizer = this;
 		JavaScriptObject values = jsValue;
 		do{
-			if(!jsonizer.containsRequiredProperties(values))
-				throw new JsonizerException();
+			String missingRequiredProperty = jsonizer.containsRequiredProperties(values);
+			if(missingRequiredProperty != null)
+				throw new JsonizerException("Required property:'" + missingRequiredProperty + "' was not found in json");
 			values = jsonizer.setProperties(bean, values);
 			jsonizer = jsonizer.getSuperJsonizer();
 		}while(jsonizer!=null);
 		return bean;
 	}	
 
+	/**
+	 * @return jsonizer of the super class if available, null otherwise
+	 */
 	protected abstract BeanJsonizer getSuperJsonizer();
+	/**
+	 * @return a javascript array object containing names of required properties  
+	 */
 	protected abstract JavaScriptObject createRequiredProperties();	
 	
 }

@@ -19,7 +19,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 /**
  * Utility class with static methods.
- * @author Gaurav Saxena 
+ * @author Gaurav Saxena<gsaxena81@gmail.com> 
  * Credited to Andrés Adolfo Testi
  *
  */

@@ -22,7 +22,7 @@ import org.jsonmaker.gwt.client.Jsonizer;
 
 /**
  * 
- * @author Gaurav Saxena 
+ * @author Gaurav Saxena<gsaxena81@gmail.com> 
  * Credited to Andrés Adolfo Testi
  *
  */

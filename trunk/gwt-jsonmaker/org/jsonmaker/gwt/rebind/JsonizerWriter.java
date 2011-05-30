@@ -34,10 +34,15 @@ import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
+import org.jsonmaker.gwt.client.annotation.NotNull;
+import org.jsonmaker.gwt.client.annotation.PropName;
+import org.jsonmaker.gwt.client.annotation.Required;
+
 /**
  * 
- * @author Gaurav Saxena 
+ * @author Gaurav Saxena<gsaxena81@gmail.com> 
  * Credited to Andrés Adolfo Testi
+ * @author Stefan Asseg <stefan.asseg@gmail.com>
  *
  */
 public class JsonizerWriter {
@@ -59,13 +64,13 @@ public class JsonizerWriter {
 	}
 	
 	private String jsonPropName(BeanProperty prop){
-		String[][] metaData = prop.getGetter().getMetaData(Constants.PROPNAME_ANNOTATION); 
-		if(metaData.length > 0){
-			if(metaData[0].length > 0){ 
-				return metaData[0][0];
-			}else{
+	    PropName propName = prop.getGetter().getAnnotation(PropName.class);
+		if (propName != null) {
+			if (propName.value() != null && !propName.value().isEmpty()) {
+				return propName.value();
+			} else {
 				logger.log(TreeLogger.WARN, "@" + Constants.PROPNAME_ANNOTATION + 
-						" annotation is not setted", null);
+						" annotation does not contain property name", null);
 			}
 		}
 		return prop.getName();		
@@ -367,7 +372,8 @@ public class JsonizerWriter {
 				if(isNotNull(bp)){
 					sw.println("else{");
 					sw.indent();
-					sw.println("throw new " + Constants.EXCEPTION_CLASS + "();");
+					sw.println("throw new " + Constants.EXCEPTION_CLASS 
+							+ "(\"NotNullable field '" +  bp.getName() + "' found null\");");
 					sw.outdent();
 					sw.println("}");							
 				}else if(isRequired(bp)){					
@@ -522,11 +528,10 @@ public class JsonizerWriter {
 	}
 	
 	private boolean isNotNull(BeanProperty prop){
-		return prop.getGetter().getMetaData(Constants.NOTNULL_ANNOTATION).length > 0;
+		return prop.getField().isAnnotationPresent(NotNull.class);
 	}
 	
 	private boolean isRequired(BeanProperty prop){
-		return prop.getGetter().getMetaData(Constants.REQUIRED_ANNOTATION).length > 0;		
+		return prop.getGetter().isAnnotationPresent(Required.class);
 	}
-	
 }

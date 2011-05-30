@@ -21,7 +21,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 /**
  * A singleton class, that parses a string with JSON format and evaluates it. 
  * 
- * @author Gaurav Saxena 
+ * @author Gaurav Saxena<gsaxena81@gmail.com>
+ * @author Stefan Asseg <stefan.asseg@gmail.com>
  * Credited to Andrés Adolfo Testi
  *
  */
@@ -42,7 +43,7 @@ public final class JsonizerParser {
 		if (jsonString == null) {
 			throw new NullPointerException();
 		}
-		if (jsonString == "") {
+		else if (jsonString.isEmpty()) {
 			throw new IllegalArgumentException("empty argument");
 		}
 		try {

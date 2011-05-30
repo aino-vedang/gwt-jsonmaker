@@ -23,7 +23,7 @@ import org.jsonmaker.gwt.client.Jsonizer;
 /**
  * Translates objects of type java.util.ArrayList.
  * 
- * @author Gaurav Saxena 
+ * @author Gaurav Saxena<gsaxena81@gmail.com> 
  * Credited to Andrés Adolfo Testi
  *
  */

@@ -29,7 +29,7 @@ import com.google.gwt.user.rebind.SourceWriter;
 
 /**
  * 
- * @author Gaurav Saxena 
+ * @author Gaurav Saxena<gsaxena81@gmail.com> 
  * Credited to Andrés Adolfo Testi
  *
  */

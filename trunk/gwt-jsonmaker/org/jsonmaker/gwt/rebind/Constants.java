@@ -23,7 +23,7 @@ import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 
 /**
  * 
- * @author Gaurav Saxena 
+ * @author Gaurav Saxena<gsaxena81@gmail.com> 
  * Credited to Andrés Adolfo Testi
  *
  */
@@ -40,10 +40,10 @@ public final class Constants {
 	public static final String EXCEPTION_CLASS = PACKAGE + ".JsonizerException";
 	public static final String JS_OBJECT_CLASS = "com.google.gwt.core.client.JavaScriptObject";	
 		
-	public static final String TRANSIENT_ANNOTATION = "jsonizer.transient";
-	public static final String REQUIRED_ANNOTATION = "jsonizer.required";
-	public static final String NOTNULL_ANNOTATION = "jsonizer.notNull";
-	public static final String PROPNAME_ANNOTATION = "jsonizer.propName";
+	public static final String TRANSIENT_ANNOTATION = "transient";
+	public static final String REQUIRED_ANNOTATION = "required";
+	public static final String NOTNULL_ANNOTATION = "notNull";
+	public static final String PROPNAME_ANNOTATION = "propName";
 	
 	public static final String GWT_CLASS = "com.google.gwt.core.client.GWT";
 	public static final String HASHMAP_JSONIZER = BASE_PACKAGE + ".HashMap" + JSONIZER_SUFFIX;

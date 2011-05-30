@@ -27,7 +27,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 /**
  * Translates objects of class java.util.HashMap.
  * 
- * @author Gaurav Saxena 
+ * @author Gaurav Saxena<gsaxena81@gmail.com> 
  * Credited to Andrés Adolfo Testi
  *
  */
