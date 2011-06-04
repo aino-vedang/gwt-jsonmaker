@@ -90,7 +90,7 @@ public abstract class BeanJsonizer implements Jsonizer {
 		//it as an array.
 			//for(prop in requiredProperties){
 		for(var i = 0; i < requiredProperties.length; i++){
-			if(jsValue[requiredProperties[i]] == undefined){
+			if(jsValue[requiredProperties[i]] == undefined){//works for both null and undefined
 				return requiredProperties[i];
 			}
 		}

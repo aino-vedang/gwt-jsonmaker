@@ -12,14 +12,18 @@
  */
 package org.jsonmaker.gwt.client.annotation;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
 import org.jsonmaker.gwt.client.JsonizerException;
 
 /**
  * @author Stefan Asseg <stefan.asseg@gmail.com>
  * Marker interface which is used to notify that a property is required in json while desrialization.
  * If the annotated property is not found, gwt-jsonmaker throws {@link JsonizerException}  
+ * This is applied on getters
  */
-@java.lang.annotation.Target({java.lang.annotation.ElementType.FIELD})
-@java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
+@Target({java.lang.annotation.ElementType.METHOD})
+@Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
 public @interface Required {
 }

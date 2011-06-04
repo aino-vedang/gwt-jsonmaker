@@ -22,6 +22,7 @@ package org.jsonmaker.gwt.client;
  * @author Andrés Testi
  *
  */
+@SuppressWarnings("serial")
 public class JsonizerException extends RuntimeException{
 	
 	/**

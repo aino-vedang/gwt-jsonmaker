@@ -66,22 +66,22 @@ public final class Constants {
 	
 	public static final String ASJAVAOBJECT_METHOD_SIGNATURE = "@" + JSONIZER_INTERFACE + "::" + AS_JAVAOBJECT_METHOD + "(" + JS_OBJECT_SIGNATURE + ")";
 	
-	public static final Map LANG_JSONIZERS;
-	public static final Map PRIMITIVE_JSONIZERS;
-	public static final Map PRIMITIVE_ARRAY_JSONIZERS;
-	public static final Map PARAMETRIZED_JSONIZERS;
+	public static final Map<String, String> LANG_JSONIZERS;
+	public static final Map<JPrimitiveType, String> PRIMITIVE_JSONIZERS;
+	public static final Map<JPrimitiveType, String> PRIMITIVE_ARRAY_JSONIZERS;
+	public static final Map<String, String> PARAMETRIZED_JSONIZERS;
 	
 	private static String jsonizerConstantName(String name){
 		return DEFAULTS_CLASS + "." + name;
 	}
 	
-	private static void registerPrimitiveJsonizer(Map map, JPrimitiveType type, String name){
+	private static void registerPrimitiveJsonizer(Map<JPrimitiveType, String> map, JPrimitiveType type, String name){
 		map.put(type, "asPrimitive" + name);
 	}
 	
 	static{
 		
-		Map _LANG_JSONIZERS  = new HashMap();
+		Map<String, String> _LANG_JSONIZERS  = new HashMap<String, String>();
 		_LANG_JSONIZERS.put("java.lang.String", jsonizerConstantName("STRING_JSONIZER"));
 		_LANG_JSONIZERS.put("java.lang.Number", jsonizerConstantName("DOUBLE_JSONIZER"));
 		_LANG_JSONIZERS.put("java.lang.Double", jsonizerConstantName("DOUBLE_JSONIZER"));
@@ -95,7 +95,7 @@ public final class Constants {
 		
 		LANG_JSONIZERS = Collections.unmodifiableMap(_LANG_JSONIZERS);
 				
-		Map _PRIMITIVE_ARRAY_JSONIZERS  = new HashMap();
+		Map<JPrimitiveType, String> _PRIMITIVE_ARRAY_JSONIZERS  = new HashMap<JPrimitiveType, String>();
 		_PRIMITIVE_ARRAY_JSONIZERS.put(JPrimitiveType.BOOLEAN, jsonizerConstantName("A_BOOLEAN_JSONIZER"));
 		_PRIMITIVE_ARRAY_JSONIZERS.put(JPrimitiveType.BYTE, jsonizerConstantName("A_BYTE_JSONIZER"));
 		_PRIMITIVE_ARRAY_JSONIZERS.put(JPrimitiveType.CHAR, jsonizerConstantName("A_CHAR_JSONIZER"));
@@ -107,7 +107,7 @@ public final class Constants {
 		
 		PRIMITIVE_ARRAY_JSONIZERS = Collections.unmodifiableMap(_PRIMITIVE_ARRAY_JSONIZERS);
 		
-		Map _PRIMITIVE_JSONIZERS = new HashMap();
+		Map<JPrimitiveType, String> _PRIMITIVE_JSONIZERS = new HashMap<JPrimitiveType, String>();
 		registerPrimitiveJsonizer(_PRIMITIVE_JSONIZERS, JPrimitiveType.INT, "Int");
 		registerPrimitiveJsonizer(_PRIMITIVE_JSONIZERS, JPrimitiveType.LONG, "Long");
 		registerPrimitiveJsonizer(_PRIMITIVE_JSONIZERS, JPrimitiveType.DOUBLE, "Double");
@@ -119,7 +119,7 @@ public final class Constants {
 		
 		PRIMITIVE_JSONIZERS = Collections.unmodifiableMap(_PRIMITIVE_JSONIZERS);		
 		
-		Map _PARAMETRIZED_JSONIZERS = new HashMap();
+		Map<String, String> _PARAMETRIZED_JSONIZERS = new HashMap<String, String>();
 		_PARAMETRIZED_JSONIZERS.put("java.util.Map", HASHMAP_JSONIZER);
 		_PARAMETRIZED_JSONIZERS.put("java.util.HashMap", HASHMAP_JSONIZER);
 		_PARAMETRIZED_JSONIZERS.put("java.util.LinkedHashMap", LINKED_HASHMAP_JSONIZER);

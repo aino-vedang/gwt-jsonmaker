@@ -22,6 +22,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.jsonmaker.gwt.client.annotation.NotNull;
+import org.jsonmaker.gwt.client.annotation.PropName;
+import org.jsonmaker.gwt.client.annotation.Required;
+
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
@@ -33,10 +37,6 @@ import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
-
-import org.jsonmaker.gwt.client.annotation.NotNull;
-import org.jsonmaker.gwt.client.annotation.PropName;
-import org.jsonmaker.gwt.client.annotation.Required;
 
 /**
  * 
@@ -64,7 +64,7 @@ public class JsonizerWriter {
 	}
 	
 	private String jsonPropName(BeanProperty prop){
-	    PropName propName = prop.getField().getAnnotation(PropName.class);
+	    PropName propName = prop.getGetter().getAnnotation(PropName.class);
 		if (propName != null) {
 			if (propName.value() != null && !propName.value().isEmpty()) {
 				return propName.value();
@@ -77,7 +77,7 @@ public class JsonizerWriter {
 	}
 	
 				
-	private void writeJSNISetter(String self, BeanProperty prop, Map jsonizers) 
+	private void writeJSNISetter(String self, BeanProperty prop, Map<JType, String> jsonizers) 
 		throws UnableToCompleteException
 	{
 
@@ -318,7 +318,7 @@ public class JsonizerWriter {
 		sw.println("}");
 	}
 	
-	private void writeStoreStringListMethod(List props, Map jsonizers) 
+	private void writeStoreStringListMethod(List<BeanProperty> props, Map<JType, String> jsonizers) 
 		throws UnableToCompleteException
 	{
 		final String javaValue = "__javaValue__";
@@ -331,7 +331,7 @@ public class JsonizerWriter {
 		sw.println(beanClass.getQualifiedSourceName() + " " + bean + " = (" + 
 			beanClass.getQualifiedSourceName() + ")" + javaValue + ";");
 		
-		Iterator it = props.iterator();
+		Iterator<BeanProperty> it = props.iterator();
 		
 		while(it.hasNext()){
 			
@@ -398,9 +398,9 @@ public class JsonizerWriter {
 				
 	}
 	
-	private Map createJsonizerGetterNames(List props){
-		Map jsonizers = new HashMap();
-		Iterator it = props.iterator();
+	private Map<JType, String> createJsonizerGetterNames(List<BeanProperty> props){
+		Map<JType, String> jsonizers = new HashMap<JType, String>();
+		Iterator<BeanProperty> it = props.iterator();
 		int i = 0;
 		while(it.hasNext()){
 			BeanProperty prop = (BeanProperty)it.next();
@@ -414,8 +414,8 @@ public class JsonizerWriter {
 		return jsonizers;
 	}
 	
-	private void writeCreateSetterPoolMethod(List properties, Map jsonizers) throws UnableToCompleteException{
-		Iterator it = properties.iterator();
+	private void writeCreateSetterPoolMethod(List<BeanProperty> properties, Map<JType, String> jsonizers) throws UnableToCompleteException{
+		Iterator<BeanProperty> it = properties.iterator();
 
 		while(it.hasNext()){
 			BeanProperty prop = (BeanProperty)it.next();
@@ -466,9 +466,9 @@ public class JsonizerWriter {
 		
 	public void writeMethods() throws UnableToCompleteException{
 
-		List properties = BeanProperty.getFullProperties(beanClass);
+		List<BeanProperty> properties = BeanProperty.getFullProperties(beanClass);
 		
-		Map jsonizerGetters = createJsonizerGetterNames(properties);
+		Map<JType, String> jsonizerGetters = createJsonizerGetterNames(properties);
 		
 		writeJsonizerGetters(jsonizerGetters);
 		
@@ -484,19 +484,19 @@ public class JsonizerWriter {
 
 	}
 
-	private void writeJsonizerGetters(Map jsonizerGetters) throws UnableToCompleteException{
-		Iterator it = jsonizerGetters.entrySet().iterator();
+	private void writeJsonizerGetters(Map<JType, String> jsonizerGetters) throws UnableToCompleteException{
+		Iterator<Map.Entry<JType, String>> it = jsonizerGetters.entrySet().iterator();
 		while(it.hasNext()){
-			Map.Entry entry = (Map.Entry)it.next();			
+			Map.Entry<JType, String> entry = (Map.Entry<JType, String>)it.next();			
 			JType type = (JType)entry.getKey();
 			if(type.isPrimitive() == null && !type.equals(beanClass))
 				writeJsonizerInstance(type, (String)entry.getValue());
 		}
 	}
 	
-	private List getRequireds(List props) {
-		ArrayList requireds = new ArrayList();
-		Iterator it = props.iterator();
+	private List<BeanProperty> getRequireds(List<BeanProperty> props) {
+		ArrayList<BeanProperty> requireds = new ArrayList<BeanProperty>();
+		Iterator<BeanProperty> it = props.iterator();
 		while (it.hasNext()) {
 			BeanProperty bp = (BeanProperty) it.next();
 			if (isRequired(bp)) {
@@ -506,16 +506,16 @@ public class JsonizerWriter {
 		return requireds;
 	}
 	
-	private void writeCreatePropertiesMethod(List props) throws UnableToCompleteException{
+	private void writeCreatePropertiesMethod(List<BeanProperty> props) throws UnableToCompleteException{
 		sw.println("protected native " + Constants.JS_OBJECT_CLASS + " createRequiredProperties()/*-{");
 		sw.indent();
 		sw.println("return [");
 		sw.indent();
 		
-		Iterator it = getRequireds(props).iterator();
+		Iterator<BeanProperty> it = getRequireds(props).iterator();
 		while(it.hasNext()){
 			BeanProperty bp = (BeanProperty)it.next();
-			sw.println("\"" + bp.getName() + "\"");
+			sw.println("\"" + jsonPropName(bp) + "\"");
 			if(it.hasNext()){
 				sw.println(",");
 			}
@@ -528,10 +528,10 @@ public class JsonizerWriter {
 	}
 	
 	private boolean isNotNull(BeanProperty prop){
-		return prop.getField().isAnnotationPresent(NotNull.class);
+		return prop.getGetter().isAnnotationPresent(NotNull.class);
 	}
 	
 	private boolean isRequired(BeanProperty prop){
-		return prop.getField().isAnnotationPresent(Required.class);
+		return prop.getGetter().isAnnotationPresent(Required.class);
 	}
 }

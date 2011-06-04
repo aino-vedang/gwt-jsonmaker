@@ -12,12 +12,16 @@
  */
 package org.jsonmaker.gwt.client.annotation;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
 /**
  * @author Stefan Asseg <stefan.asseg@gmail.com>
  * Used to provide alias for default property name during serialization.
+ * This is applied on getters
  */
-@java.lang.annotation.Target({java.lang.annotation.ElementType.FIELD})
-@java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
+@Target({java.lang.annotation.ElementType.METHOD})
+@Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
 public @interface PropName {
   java.lang.String value();
 }

@@ -21,7 +21,6 @@ import java.util.List;
 import org.jsonmaker.gwt.client.annotation.Transient;
 
 import com.google.gwt.core.ext.typeinfo.JClassType;
-import com.google.gwt.core.ext.typeinfo.JField;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 import com.google.gwt.core.ext.typeinfo.JType;
@@ -36,14 +35,12 @@ public class BeanProperty {
 	
 	private JMethod setter;
 	private JMethod getter;
-	private JField field;
 	private String name;
 	
-	public BeanProperty(String capitalizedName, JMethod getter, JMethod setter, JField field){
+	public BeanProperty(String capitalizedName, JMethod getter, JMethod setter){
 		this.name = recapitalize(capitalizedName);
 		this.getter = getter;
 		this.setter = setter;
-		this.field = field;
 	}
 	
 	public String getName(){
@@ -65,9 +62,6 @@ public class BeanProperty {
 	public JClassType getEnclosingType(){
 		return getter.getEnclosingType();
 	}
-	public JField getField() {
-		return field;
-	}
 	private static String recapitalize(String capitalized){
 		StringBuffer buffer = new StringBuffer(capitalized);
 		char first = buffer.charAt(0);
@@ -76,28 +70,28 @@ public class BeanProperty {
 		return buffer.toString();
 	}
 		
-	private static boolean isCandidateAccessor(JMethod method, JField field){
+	private static boolean isCandidateAccessor(JMethod method){
 		return 
-			!field.isAnnotationPresent(Transient.class) &&  
+			!method.isAnnotationPresent(Transient.class) &&  
 			method.isPublic() && 
 			!method.isAbstract() && 
 			!method.isStatic();
 	}
 	
-	private static boolean hasAccessors(JClassType cls, JMethod getter, JMethod setter, JField field){
+	private static boolean hasAccessors(JClassType cls, JMethod getter, JMethod setter){
 		final JType[] params = {};
 		JMethod superGetter = cls.findMethod(getter.getName(), params);
 		if(superGetter==null)
 			return false;
 		if(!superGetter.getReturnType().equals(getter.getReturnType()))
 			return false;
-		if(!isCandidateAccessor(superGetter, field))
+		if(!isCandidateAccessor(superGetter))
 			return false;
 		
 		JMethod superSetter = cls.findMethod(setter.getName(), new JType[]{getter.getReturnType()});
 		if(superSetter==null)
 			return false;
-		if(!isCandidateAccessor(superSetter, field))
+		if(!isCandidateAccessor(superSetter))
 			return false;
 		if(!setter.getReturnType().equals(JPrimitiveType.VOID))
 			return false;
@@ -105,13 +99,13 @@ public class BeanProperty {
 		return true;			
 	}
 	
-	private static boolean isOverride(JClassType cls, JMethod getter, JMethod setter, JField field){
+	private static boolean isOverride(JClassType cls, JMethod getter, JMethod setter){
 		JClassType langObject = cls.getOracle().getJavaLangObject();
 		while(true){
 			cls = cls.getSuperclass();
 			if(cls.equals(langObject))
 				return false;
-			if(hasAccessors(cls, getter, setter, field))
+			if(hasAccessors(cls, getter, setter))
 				return true;
 		}
 	}
@@ -120,9 +114,9 @@ public class BeanProperty {
 		return getter.getReturnType();
 	}
 	
-	public static List getFullProperties(JClassType cls) {
+	public static List<BeanProperty> getFullProperties(JClassType cls) {
 
-		ArrayList properties = new ArrayList();
+		ArrayList<BeanProperty> properties = new ArrayList<BeanProperty>();
 		JMethod[] methods = cls.getMethods();
 
 		for (int i = 0; i < methods.length; i++) {
@@ -130,9 +124,9 @@ public class BeanProperty {
 			String getterName = getter.getName();
 			int propertyNameStartIndex = getterName.startsWith("get") ? 3 : 2;
 			String capitalizedName = getterName.substring(propertyNameStartIndex);
-			JField field = cls.findField((char)(capitalizedName.charAt(0) + 32) + capitalizedName.substring(1));
+			//JField field = cls.findField((char)(capitalizedName.charAt(0) + 32) + capitalizedName.substring(1));
 			if ((getterName.startsWith("get") || getterName.startsWith("is"))
-					&& getter.getParameters().length == 0 && isCandidateAccessor(getter, field))
+					&& getter.getParameters().length == 0 && isCandidateAccessor(getter))
 			{
 				JType type = getter.getReturnType();
 				String setterName = "set" + capitalizedName;
@@ -146,12 +140,12 @@ public class BeanProperty {
 								+ capitalizedName.substring(1) + "' in class named '" + cls.getName()
 								+ "' should declare a setter with argument of type double; This argument may be cast to long in the method");
 				}*/
-				if (setter != null && 
+				if (setter != null && //field needs to be null checked. If field is not found, don't add
 					setter.getReturnType().equals(JPrimitiveType.VOID) && 
-					isCandidateAccessor(setter, field) &&
-					!isOverride(cls, getter, setter, field))
+					isCandidateAccessor(setter) &&
+					!isOverride(cls, getter, setter))
 				{
-					properties.add(new BeanProperty(capitalizedName, getter, setter, field));
+					properties.add(new BeanProperty(capitalizedName, getter, setter));
 				}
 			}
 		}
