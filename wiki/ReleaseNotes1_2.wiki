@@ -6,6 +6,6 @@
 public interface ResultSetJsonizer extends Jsonizer{}
 }}}
 
-The previous approach of keeping the Jsonizer and bean in the same packages doesn't need this declaration. 
+The previous approach of keeping the Jsonizer and bean in the same packages doesn't need this declaration and works as it used to
 
 The code checks for the bean in the same package as the Jsonizer first. In case, the bean class is not found in the same package, the value of JsonizerBean annotation is checked
