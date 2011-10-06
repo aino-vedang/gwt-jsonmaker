@@ -151,7 +151,7 @@ public class Defaults {
 		}
 		
 		public String asString(Object javaValue) throws JsonizerException {
-			return Utils.escapeValue((String)javaValue);
+			return Utils.escapeValue(javaValue.toString());
 		}
 		
 	};
@@ -297,7 +297,7 @@ public class Defaults {
 			var javaArray = @org.jsonmaker.gwt.client.base.Defaults.A_IntJsonizer::createArray(I)(jsValue.length);
 				
 			var i;
-			for(i in jsValue){		
+			for( var i=0, len=jsValue.length; i<len; i++ ){		
 				@org.jsonmaker.gwt.client.base.Defaults.A_IntJsonizer::storeValue([IILcom/google/gwt/core/client/JavaScriptObject;)(javaArray, parseInt(i), Object(jsValue[i]));
 			}			
 				
@@ -345,8 +345,7 @@ public class Defaults {
 					
 			var javaArray = @org.jsonmaker.gwt.client.base.Defaults.A_LongJsonizer::createArray(I)(jsValue.length);
 				
-			var i;
-			for(i in jsValue){
+			for( var i=0, len=jsValue.length; i<len; i++ ){
 				@org.jsonmaker.gwt.client.base.Defaults.A_LongJsonizer::storeValue([JILcom/google/gwt/core/client/JavaScriptObject;)(javaArray, parseInt(i), Object(jsValue[i]));
 			}			
 				
@@ -390,8 +389,7 @@ public class Defaults {
 					
 			var javaArray = @org.jsonmaker.gwt.client.base.Defaults.A_FloatJsonizer::createArray(I)(jsValue.length);
 				
-			var i;
-			for(i in jsValue){
+			for( var i=0, len=jsValue.length; i<len; i++ ){
 				@org.jsonmaker.gwt.client.base.Defaults.A_FloatJsonizer::storeValue([FILcom/google/gwt/core/client/JavaScriptObject;)(javaArray, parseInt(i), Object(jsValue[i]));
 			}			
 				
@@ -435,8 +433,7 @@ public class Defaults {
 					
 			var javaArray = @org.jsonmaker.gwt.client.base.Defaults.A_DoubleJsonizer::createArray(I)(jsValue.length);
 				
-			var i;
-			for(i in jsValue){
+			for( var i=0, len=jsValue.length; i<len; i++ ){
 				@org.jsonmaker.gwt.client.base.Defaults.A_DoubleJsonizer::storeValue([DILcom/google/gwt/core/client/JavaScriptObject;)(javaArray, parseInt(i), Object(jsValue[i]));
 			}			
 				
@@ -494,8 +491,7 @@ public class Defaults {
 					
 			var javaArray = @org.jsonmaker.gwt.client.base.Defaults.A_ByteJsonizer::createArray(I)(jsValue.length);
 				
-			var i;
-			for(i in jsValue){
+			for( var i=0, len=jsValue.length; i<len; i++ ){
 				@org.jsonmaker.gwt.client.base.Defaults.A_ByteJsonizer::storeValue([BILcom/google/gwt/core/client/JavaScriptObject;)(javaArray, parseInt(i), Object(jsValue[i]));
 			}			
 				
@@ -525,7 +521,7 @@ public class Defaults {
 			buffer.append('[');
 			int top = array.length - 1;
 			for(int i = 0; i < array.length; i++){
-				buffer.append(array[i]);
+				buffer.append((int)array[i]);
 				if(i < top)
 					buffer.append(',');
 			}
@@ -539,18 +535,18 @@ public class Defaults {
 					
 			var javaArray = @org.jsonmaker.gwt.client.base.Defaults.A_CharJsonizer::createArray(I)(jsValue.length);
 				
-			var i;
-			for(i in jsValue){
+			for( var i=0, len=jsValue.length; i<len; i++ ){
 				@org.jsonmaker.gwt.client.base.Defaults.A_CharJsonizer::storeValue([CILcom/google/gwt/core/client/JavaScriptObject;)(javaArray, parseInt(i), Object(jsValue[i]));
 			}			
 				
 			return javaArray;
 		}-*/;
 		
+		@SuppressWarnings("unused")//used in native function
 		private static void storeValue(char[] array, int index, JavaScriptObject jsValue) throws JsonizerException{
 			array[index] = asPrimitiveChar(jsValue);
 		}
-		
+		@SuppressWarnings("unused")//used in native function
 		private static char[] createArray(int size){
 			return new char[size];
 		}
@@ -584,8 +580,7 @@ public class Defaults {
 					
 			var javaArray = @org.jsonmaker.gwt.client.base.Defaults.A_ShortJsonizer::createArray(I)(jsValue.length);
 				
-			var i;
-			for(i in jsValue){
+			for( var i=0, len=jsValue.length; i<len; i++ ){
 				@org.jsonmaker.gwt.client.base.Defaults.A_ShortJsonizer::storeValue([SILcom/google/gwt/core/client/JavaScriptObject;)(javaArray, parseInt(i), Object(jsValue[i]));
 			}			
 				
@@ -614,8 +609,7 @@ public class Defaults {
 				@org.jsonmaker.gwt.client.base.Defaults::throwJsonizerException()();
 					
 			var javaArray = @org.jsonmaker.gwt.client.base.Defaults.A_BooleanJsonizer::createArray(I)(jsValue.length);	
-			var i;
-			for(i in jsValue){
+			for( var i=0, len=jsValue.length; i<len; i++ ){
 				@org.jsonmaker.gwt.client.base.Defaults.A_BooleanJsonizer::storeValue([ZILcom/google/gwt/core/client/JavaScriptObject;)(javaArray, parseInt(i), Object(jsValue[i]));
 			}			
 				

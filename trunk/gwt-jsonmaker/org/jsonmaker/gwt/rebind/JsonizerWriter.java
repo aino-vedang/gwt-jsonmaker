@@ -96,7 +96,6 @@ public class JsonizerWriter {
 			sw.outdent();
 			sw.println("}");
 		}
-		
 		String toJavaExp;
 		
 		if(prop.getType().isPrimitive()!=null){
@@ -104,14 +103,13 @@ public class JsonizerWriter {
 				"@" + Constants.DEFAULTS_CLASS + "::" + 
 				(String)Constants.PRIMITIVE_JSONIZERS.get(prop.getType()) + 
 				"(" + Constants.JS_OBJECT_SIGNATURE +")(Object(" + jsValue + "))";
-		} else if(prop.getType().toString().equals("class java.lang.String"))
-		{
+		} else if(prop.getType().isEnum() != null) {
+			toJavaExp = jsValue;
+		} else if(prop.getType().toString().equals("class java.lang.String")) {
 			toJavaExp = 
 				"@" + Constants.DEFAULTS_CLASS + "::asPrimitiveString" + 
-				//(String)Constants.PRIMITIVE_JSONIZERS.get(prop.getType()) + 
 				"(" + "Ljava/lang/String;" +")(Object(" + jsValue + "))";
-		}
-		else{
+		} else{
 			String jsonizerExp;
 			if(prop.getType().equals(beanClass)){
 				jsonizerExp = self;
@@ -127,24 +125,32 @@ public class JsonizerWriter {
 				"(Object(" + jsValue + "))";
 		}
 		if(prop.getType() == JPrimitiveType.LONG)
-		{
-			String argSignature = "Ljava/lang/Object;";
-			JParameter[] params = prop.getSetter().getParameters();
-			for(int i = 0; i < params.length; i++){
-				if(params[i].getType().equals(JPrimitiveType.LONG))
-					argSignature += JPrimitiveType.DOUBLE.getJNISignature();
-				else
-					argSignature += params[i].getType().getJNISignature();
-			}		
-			sw.println(self + ".@" + implClassName + "::" + prop.getSetter().getName() + "(" + argSignature 
-					+ ")(" + bean + "," + toJavaExp + ");");
-		}
+			writeLongSetter(prop, self, bean, toJavaExp);
+		else if(prop.getType().isEnum() != null)
+			writeEnumSetter(prop, self, bean, toJavaExp);
 		else
 			sw.println(prop.getJSNISetterInvocation(bean, toJavaExp) + ";");
 		sw.outdent();		
 		sw.print("}");
 	}
 	
+
+	private void writeEnumSetter(BeanProperty prop, String self, String bean, String toJavaExp) {
+		String argSignature = "Ljava/lang/Object;Ljava/lang/String;";
+		sw.println(self + ".@" + implClassName + "::" + prop.getSetter().getName() + "(" + argSignature + ")(" + bean + "," + toJavaExp + ");");
+	}
+
+	private void writeLongSetter(BeanProperty prop, String self, String bean, String toJavaExp) {
+		String argSignature = "Ljava/lang/Object;";
+		JParameter[] params = prop.getSetter().getParameters();
+		for(int i = 0; i < params.length; i++){
+			if(params[i].getType().equals(JPrimitiveType.LONG))
+				argSignature += JPrimitiveType.DOUBLE.getJNISignature();
+			else
+				argSignature += params[i].getType().getJNISignature();
+		}		
+		sw.println(self + ".@" + implClassName + "::" + prop.getSetter().getName() + "(" + argSignature + ")(" + bean + "," + toJavaExp + ");");
+	}
 
 	private String jsonizerExp(JType type) throws UnableToCompleteException{
 				
@@ -228,8 +234,11 @@ public class JsonizerWriter {
 	}
 	
 	private String classJsonizerExp(JClassType classType) throws UnableToCompleteException{
-
-		Object exp = Constants.LANG_JSONIZERS.get(classType.getQualifiedSourceName());
+		Object exp;
+		if(classType.isEnum() != null)
+			exp = Constants.LANG_JSONIZERS.get("java.lang.String");
+		else
+			exp = Constants.LANG_JSONIZERS.get(classType.getQualifiedSourceName());
 
 		if(exp!=null){
 			return exp.toString();
@@ -341,13 +350,11 @@ public class JsonizerWriter {
 			
 			String propLabel = "\\\"" + jsonPropName(bp) + "\\\":"; 
 			
-			
 			String getterExp = bean + "." + bp.getGetter().getName() + "()";
 
-			if(bp.getType().isPrimitive()!=null){
+			if(bp.getType().isPrimitive()!=null)
 				sw.println(list + ".add(\"" + propLabel + "\" + " + getterExp + ");");
-				
-			}else{ 	
+			else{ 	
 				
 				sw.println("{");
 				sw.indent();
@@ -415,23 +422,7 @@ public class JsonizerWriter {
 	}
 	
 	private void writeCreateSetterPoolMethod(List<BeanProperty> properties, Map<JType, String> jsonizers) throws UnableToCompleteException{
-		Iterator<BeanProperty> it = properties.iterator();
-
-		while(it.hasNext()){
-			BeanProperty prop = (BeanProperty)it.next();
-			if(prop.getType() == JPrimitiveType.LONG)
-			{
-				sw.println("");
-				sw.print("private void ");sw.print(prop.getSetter().getName());sw.print("(");
-						sw.print("Object bean, double d");sw.print(")");sw.print("{");
-				sw.println("");sw.indent();
-					sw.print("((" + prop.getSetter().getEnclosingType().getQualifiedSourceName() + ")bean).");
-					sw.print(prop.getSetter().getName());sw.print("((long) d);");
-					sw.println("");
-				sw.outdent();
-				sw.print("}");sw.println("");
-			}
-		}
+		writeHelperMthods(properties);
 		final String self = "__self__";
 		sw.println("protected native " + Constants.JS_OBJECT_CLASS + " createSetterPool()/*-{");
 
@@ -442,7 +433,7 @@ public class JsonizerWriter {
 		
 		sw.indent();		
 		
-		it = properties.iterator();
+		Iterator<BeanProperty> it = properties.iterator();
 
 		while(it.hasNext()){
 			
@@ -464,6 +455,43 @@ public class JsonizerWriter {
 		
 	}
 		
+	private void writeHelperMthods(List<BeanProperty> properties) {
+		Iterator<BeanProperty> it = properties.iterator();
+
+		while(it.hasNext()) {
+			BeanProperty prop = (BeanProperty)it.next();
+			if(prop.getType() == JPrimitiveType.LONG)
+				writeHelperLongMethod(prop);
+			else if (prop.getType().isEnum() != null)
+				writeHelperEnumMethod(prop);
+		}
+	}
+
+	private void writeHelperLongMethod(BeanProperty prop) {
+		sw.println("");
+		sw.print("private void ");sw.print(prop.getSetter().getName());sw.print("(");sw.print("Object bean, double d");sw.print(") {");
+		sw.println("");sw.indent();
+			sw.print("((" + prop.getSetter().getEnclosingType().getQualifiedSourceName() + ")bean).");sw.print(prop.getSetter().getName());sw.print("((long) d);");
+			sw.println("");
+		sw.outdent();
+		sw.print("}");sw.println("");
+	}
+
+	private void writeHelperEnumMethod(BeanProperty prop) {
+		sw.println("");
+		sw.print("private void ");sw.print(prop.getSetter().getName());sw.print("(");sw.print("Object bean, String enumString");sw.print(") {");
+			sw.println("");sw.indent();
+				sw.println("for(" + prop.getType().getQualifiedSourceName() +" v : "  + prop.getType().getQualifiedSourceName() + ".values())");
+				sw.indent();
+					sw.println("if(enumString.equals(v.toString()))");
+					sw.indent();
+						sw.print("((" + prop.getSetter().getEnclosingType().getQualifiedSourceName() + ")bean).");sw.print(prop.getSetter().getName());sw.print("(v);");
+					sw.println("");	sw.outdent();
+				sw.println("");	sw.outdent();
+			sw.println("");	sw.outdent();
+		sw.print("}");sw.println("");
+	}
+
 	public void writeMethods() throws UnableToCompleteException{
 
 		List<BeanProperty> properties = BeanProperty.getFullProperties(beanClass);

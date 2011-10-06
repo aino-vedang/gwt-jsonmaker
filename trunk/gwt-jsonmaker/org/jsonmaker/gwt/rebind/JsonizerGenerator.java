@@ -17,6 +17,8 @@ package org.jsonmaker.gwt.rebind;
 
 import java.io.PrintWriter;
 
+import org.jsonmaker.gwt.client.annotation.JsonizerBean;
+
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
@@ -73,13 +75,19 @@ public class JsonizerGenerator extends Generator {
 	  //  logger.log(TreeLogger.INFO, "buscando el bean '" + qualifiedBeanClassName + "'", null);
 	    
 	    JClassType beanClass = context.getTypeOracle().findType(qualifiedBeanClassName);
-
+	    String packageName = converterClass.getPackage().getName();
 	    if(beanClass==null){
-	    	logger.log(TreeLogger.ERROR, "Class '" + qualifiedBeanClassName + "' not found but Jsonizer found", null);
-	    	throw new UnableToCompleteException();
+	    	JsonizerBean beanClassAnnotation = converterClass.getAnnotation(JsonizerBean.class);
+	    	if(beanClassAnnotation != null) {
+	    		qualifiedBeanClassName = beanClassAnnotation.value();
+	    		beanClass = context.getTypeOracle().findType(qualifiedBeanClassName);
+	    		packageName = beanClass.getPackage().getName();
+	    	} else {
+		    	logger.log(TreeLogger.ERROR, "Class '" + qualifiedBeanClassName + "' not found but Jsonizer found. Please use Jsonizer bean annotation if both jsonizer and the bean are not in the same package", null);
+		    	throw new UnableToCompleteException();
+	    	}
 	    }
 	    
-	    String packageName = converterClass.getPackage().getName();
 	    JClassType superBeanClass = beanClass.getSuperclass();
 	    
 	    // Verificacion de que los conversores de superclase implementen BeanJ2BConverter
