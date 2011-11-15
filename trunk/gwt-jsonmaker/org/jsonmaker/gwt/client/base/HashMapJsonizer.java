@@ -33,14 +33,16 @@ import com.google.gwt.core.client.JavaScriptObject;
  */
 public class HashMapJsonizer implements Jsonizer{
 	
-	private Jsonizer elemJsonizer;
+	private Jsonizer keyJsonizer;
+	private Jsonizer valueJsonizer;
 	
 	/**
 	 * Constructs a new HashMapJsonizer.
 	 * @param elemJsonizer Jsonizer for inner type.
 	 */
-	public HashMapJsonizer(Jsonizer elemJsonizer){
-		this.elemJsonizer = elemJsonizer;		
+	public HashMapJsonizer(Jsonizer keyJsonizer, Jsonizer valueJsonizer){
+		this.keyJsonizer = keyJsonizer;
+		this.valueJsonizer = valueJsonizer;
 	}
 		
 	protected Map createMap(){
@@ -49,22 +51,32 @@ public class HashMapJsonizer implements Jsonizer{
 	
 	private native Map storeMap(JavaScriptObject jsObject)/*-{
 		var map = this.@org.jsonmaker.gwt.client.base.HashMapJsonizer::createMap()();
-		var jsonizer = this.@org.jsonmaker.gwt.client.base.HashMapJsonizer::elemJsonizer;
-		var i;
-		for(i in jsObject){
-			if(i.indexOf('__gwt_ObjectId') != 0)//hack for chrome because gwt introduces another attribute __gwt_ObjectId for chrome!
+		for(var i = 0; i < jsObject.length; i++){
+			if(jsObject[i]['key'].toString().indexOf('__gwt_ObjectId') != 0)//hack for chrome because gwt introduces another attribute __gwt_ObjectId for chrome!
 			{
-				var rawValue = jsObject[i];
+				var rawValue = jsObject[i]['value'];
 				var finalValue;
 				if(rawValue == null)
 					finalValue = null;
-				else{
-					if(typeof rawValue != 'string')
+				else {
+					if(typeof rawValue != 'string') {
+						var jsonizer = this.@org.jsonmaker.gwt.client.base.HashMapJsonizer::valueJsonizer;
 						finalValue = jsonizer.@org.jsonmaker.gwt.client.Jsonizer::asJavaObject(Lcom/google/gwt/core/client/JavaScriptObject;)(Object(rawValue));
-					else
+					} else
 						finalValue = @org.jsonmaker.gwt.client.base.Defaults::asPrimitiveString(Ljava/lang/String;)(rawValue);
 				}
-				map.@java.util.Map::put(Ljava/lang/Object;Ljava/lang/Object;)(i, finalValue);
+				var rawKey = jsObject[i]['key'];
+				var finalKey;
+				if(rawKey == null)
+					finalKey = null;
+				else {
+					if(typeof rawKey != 'string') {
+						var jsonizer = this.@org.jsonmaker.gwt.client.base.HashMapJsonizer::keyJsonizer;
+						finalKey = jsonizer.@org.jsonmaker.gwt.client.Jsonizer::asJavaObject(Lcom/google/gwt/core/client/JavaScriptObject;)(Object(rawKey));
+					} else
+						finalKey = @org.jsonmaker.gwt.client.base.Defaults::asPrimitiveString(Ljava/lang/String;)(rawKey);
+				}
+				map.@java.util.Map::put(Ljava/lang/Object;Ljava/lang/Object;)(finalKey, finalValue);
 			}
 		}
 		return map;
@@ -80,16 +92,19 @@ public class HashMapJsonizer implements Jsonizer{
 		Map map = (Map)javaValue;
 		Iterator it = map.entrySet().iterator();
 		StringBuffer buffer = new StringBuffer();
-		buffer.append('{');
+		buffer.append("[");
 		while(it.hasNext()){
 			Map.Entry entry = (Map.Entry)it.next();
-			buffer.append(Utils.escapeValue((String)entry.getKey()) + ":");
-			buffer.append(elemJsonizer.asString(entry.getValue()));
+			buffer.append("{key:");
+			buffer.append(keyJsonizer.asString(entry.getKey()));
+			buffer.append(",value:");
+			buffer.append(valueJsonizer.asString(entry.getValue()));
+			buffer.append("}");
 			if(it.hasNext()){
 				buffer.append(',');
 			}
 		}
-		buffer.append('}');
+		buffer.append("]");
 		return buffer.toString();
 	}
 

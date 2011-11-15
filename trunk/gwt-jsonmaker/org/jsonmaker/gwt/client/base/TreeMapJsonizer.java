@@ -28,13 +28,12 @@ import org.jsonmaker.gwt.client.Jsonizer;
  *
  */
 public class TreeMapJsonizer extends HashMapJsonizer{
-	
 	/**
 	 * Constructs a new HashMapJsonizer.
 	 * @param elemJsonizer Jsonizer for inner type.
 	 */
-	public TreeMapJsonizer(Jsonizer elemJsonizer){
-		super(elemJsonizer);
+	public TreeMapJsonizer(Jsonizer keyJsonizer, Jsonizer valueJsonizer) {
+		super(keyJsonizer, valueJsonizer);
 	}
 		
 	protected Map createMap(){

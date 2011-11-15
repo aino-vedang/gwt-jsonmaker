@@ -215,7 +215,7 @@ public class JsonizerWriter {
 			throw new UnableToCompleteException();
 		}
 		
-		String elemJsonizer;
+		/*String elemJsonizer;
 		
 		JType[] args = paramType.getTypeArgs();
 		if(args.length > 1){
@@ -228,9 +228,11 @@ public class JsonizerWriter {
 			elemJsonizer = jsonizerExp(args[1]);
 		}else{
 			elemJsonizer = jsonizerExp(args[0]);
-		}
-		
-		return "(new " + jsonizerClass + "(" + elemJsonizer + "))";
+		}*/
+		StringBuffer paramString = new StringBuffer();
+		for(JClassType i : paramType.getTypeArgs())
+			paramString.append(jsonizerExp(i)).append(",");
+		return "(new " + jsonizerClass + "(" + paramString.deleteCharAt(paramString.length() - 1).toString() + "))";
 	}
 	
 	private String classJsonizerExp(JClassType classType) throws UnableToCompleteException{

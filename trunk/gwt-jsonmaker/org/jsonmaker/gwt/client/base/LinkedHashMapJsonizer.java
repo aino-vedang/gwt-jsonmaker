@@ -28,15 +28,14 @@ import org.jsonmaker.gwt.client.Jsonizer;
  *
  */
 public class LinkedHashMapJsonizer extends HashMapJsonizer{
-	
 	/**
 	 * Constructs a new HashMapJsonizer.
 	 * @param elemJsonizer Jsonizer for inner type.
 	 */
-	public LinkedHashMapJsonizer(Jsonizer elemJsonizer){
-		super(elemJsonizer);
+	public LinkedHashMapJsonizer(Jsonizer keyJsonizer, Jsonizer valueJsonizer) {
+		super(keyJsonizer, valueJsonizer);
 	}
-		
+
 	protected Map createMap(){
 		return new LinkedHashMap();
 	}
