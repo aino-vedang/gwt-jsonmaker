@@ -87,8 +87,7 @@ public class JsonizerWriter {
 		sw.println("\"" + jsonPropName(prop) + "\": function(" + bean + ", " + jsValue + "){");
 		sw.indent();
 		
-		if(prop.getType().isPrimitive() == null 
-				&& !isNotNull(prop) && !prop.getType().toString().equals("class java.lang.String")){
+		if(prop.getType().isPrimitive() == null && !isNotNull(prop) && !prop.getType().toString().equals("class java.lang.String")){
 			sw.println("if(" + jsValue + " == null){");
 			sw.indent();
 			sw.println(prop.getJSNISetterInvocation(bean, "null") + "; ");
@@ -106,9 +105,8 @@ public class JsonizerWriter {
 		} else if(prop.getType().isEnum() != null) {
 			toJavaExp = jsValue;
 		} else if(prop.getType().toString().equals("class java.lang.String")) {
-			toJavaExp = 
-				"@" + Constants.DEFAULTS_CLASS + "::asPrimitiveString" + 
-				"(" + "Ljava/lang/String;" +")(Object(" + jsValue + "))";
+			toJavaExp =	"(" + jsValue + " == null)? null : " +
+				"@" + Constants.DEFAULTS_CLASS + "::asPrimitiveString" + "(" + "Ljava/lang/String;" +")(Object(" + jsValue + "))";
 		} else{
 			String jsonizerExp;
 			if(prop.getType().equals(beanClass)){
