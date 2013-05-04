@@ -184,9 +184,15 @@ public class JsonizerWriter {
 	
 	private String ensureJsonizer(JClassType beanClass){
 		String simpleName = RebindUtils.jsonizerSimpleName(beanClass);
-				
-		PrintWriter writer = ctx.tryCreate(logger, beanClass.getPackage().getName(), simpleName);
-		if(writer!=null){
+		
+		JClassType jsonizer = ctx.getTypeOracle().findType(beanClass.getPackage().getName(), simpleName);
+		JClassType nestedJsonizer = ctx.getTypeOracle().findType(beanClass.getPackage().getName(), beanClass.getSimpleSourceName() + "." + simpleName);
+		if(jsonizer != null)
+			return jsonizer.getName();
+		else if (nestedJsonizer != null)
+			return nestedJsonizer.getName();
+		else {
+			PrintWriter writer = ctx.tryCreate(logger, beanClass.getPackage().getName(), simpleName);
 			ClassSourceFileComposerFactory composerFactory = new ClassSourceFileComposerFactory(
 				beanClass.getPackage().getName(), simpleName);
 			
@@ -195,10 +201,8 @@ public class JsonizerWriter {
 			composerFactory.addImplementedInterface(Constants.JSONIZER_INTERFACE);
 
 			composerFactory.createSourceWriter(ctx, writer).commit(logger);
+			return beanClass.getPackage().getName() + "." + simpleName;
 		}
-		
-		return beanClass.getPackage().getName() + "." + simpleName;
-		
 	}
 	
 	private String parametrizedJsonizerExp(JParameterizedType paramType) 
